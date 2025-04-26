@@ -70,22 +70,64 @@
                                     <h4>User List</h4>
                                 </div>
                                 <div class="card-body table-responsive">
+                                    <form action="{{ route('articles.index') }}" method="GET" class="mb-4">
+                                        <div class="input-group">
+                                            <input type="text" name="search" class="form-control"
+                                                value="{{ old('search', $search ?? '') }}"
+                                                placeholder="Search articles..." aria-label="Search">
+                                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                        </div>
+                                    </form>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Categories</th>
+                                                <th>Verify</th>
+                                                <th>Title</th>
+                                                <th>Abstract</th>
+                                                <th>Category ID</th>
+                                                <th>Author Name</th>
+                                                <th>Author Email</th>
+                                                <th>Tags</th>
+                                                <th>User ID</th>
+                                                <th>Content</th>
+                                                <th>Supporting Files</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($categories as $cat)
+                                            @forelse ($articles as $article)
                                             <tr>
-                                                <td>{{ $cat->id }}</td>
-                                                <td>{{ $cat->cat_name }}</td>
+                                                <td>{{ $article->id }}</td>
                                                 <td>
-                                                    <form action="{{ route('category.delete', $cat->id) }}"
-                                                        method="POST" style="display:inline;">
+                                                    <form action="{{ route('articles.updateVerify', $article->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <select name="verify" onchange="this.form.submit()"
+                                                            class="form-control">
+                                                            <option value="1" {{ $article->verify ? 'selected' : '' }}>
+                                                                True</option>
+                                                            <option value="0" {{ !$article->verify ? 'selected' : '' }}>
+                                                                False</option>
+                                                        </select>
+                                                    </form>
+                                                </td>
+
+                                                <td>{{ $article->title }}</td>
+                                                <td>{{ $article->abstract }}</td>
+                                                <td>{{ $article->category_id }}</td>
+                                                <td>{{ $article->author_name }}</td>
+                                                <td>{{ $article->author_email }}</td>
+                                                <td>{{ $article->tags }}</td>
+                                                <td>{{ $article->user_id }}</td>
+                                                <td>{{ $article->content }}</td>
+                                                <td>{{ $article->supporting_files }}</td>
+                                                <td>
+                                                    <!-- Delete Button -->
+                                                    <form action="{{ route('articles.delete', $article->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Are you sure you want to delete this article?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -95,7 +137,7 @@
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="3" class="text-center">No categories found</td>
+                                                <td colspan="12" class="text-center">No articles found</td>
                                             </tr>
                                             @endforelse
                                         </tbody>
@@ -104,22 +146,12 @@
                                     <!-- Pagination -->
 
                                     <div class="d-flex justify-content-center">
-                                        {{ $categories->links('pagination::bootstrap-5') }}
+                                        {{ $articles->links('pagination::bootstrap-5') }}
                                         <!-- Pagination links -->
                                     </div>
 
                                     <!-- Add Category Button -->
-                                     <form action="/category/store" method="POST">
-                                        @csrf
-                                    <div class="mt-3">
-                                        <div class="form-group">
-                                        <input type="text" class="form-control" name="category" placeholder="Enter your Email">
 
-                                            <small class="form-alert">Please Enter New Category name</small>
-                                        </div>
-                                        <button type="submit">Add Category</button>
-                                    </div>
-                                    </form>
 
                                     <!-- Add Category Modal -->
                                     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog"

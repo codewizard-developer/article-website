@@ -18,6 +18,16 @@ class Article extends Model
         'tags',
         'supporting_files',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);  // Assuming the foreign key is 'user_id'
+    }
+
+    // Define the relationship to the Category model
+    public function category()
+    {
+        return $this->belongsTo(Category::class);  // Assuming the foreign key is 'category_id'
+    }
     
     
 }

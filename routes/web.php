@@ -11,6 +11,10 @@ use App\Http\Controllers\ArticleController;
 
 
 // post apis
+Route::get('/contactus',function(){
+    return view('contactus');
+});
+Route::get('/user/plans',[PagesController::class,'plans']);
 Route::post('/register', [RegisterController::class, 'store'])->name('register.user');
 Route::post('/verify-code', [RegisterController::class, 'verifyCode']);
 Route::post('/updateprofile', [RegisterController::class, 'updateprofile']);
@@ -31,6 +35,9 @@ Route::post('/authticate-admin', [AdminAuthController::class, 'login'])->name('a
 Route::middleware([\App\Http\Middleware\AdminAuthMiddleware::class, 'web'])->group(function () {
     Route::get('/user/edit/{id}', [AdminController::class, 'edit'])->name('user.edit'); // Edit user
     Route::get('/categories',[AdminController::class,'showcategories'])->name('dashboard.categories');
+    Route::get('/admin-article', [AdminController::class, 'showarticle'])->name('articles.index');
+    Route::delete('/delete-article/{id}', [AdminController::class, 'deleteArticle'])->name('articles.delete');
+    Route::patch('/update-verify/{id}', [AdminController::class, 'updateVerify'])->name('articles.updateVerify');
     Route::post('/category/store', [AdminController::class, 'storeCategory'])->name('category.store');
     Route::delete('/category/delete/{id}', [AdminController::class, 'deleteCategory'])->name('category.delete');
     Route::get('/dashboard', [AdminAuthController::class, 'show'])->name('dashboard.dashboard');
@@ -57,4 +64,5 @@ Route::post('/logout', function () {
 Route::get('/article',[PagesController::class,'showarticlepage']);
 // In routes/web.php
 Route::post('/submit-article', [ArticleController::class, 'submitArticle'])->name('submit-article');
-Route::get('/user/{id}', [PagesController::class, 'viewuser'])->name('user.updateuser'); // Edit user
+Route::get('/user/{id}', [PagesController::class, 'viewuser'])->name('user.updateuser');
+Route::get('/',[PagesController::class,'homepage']);

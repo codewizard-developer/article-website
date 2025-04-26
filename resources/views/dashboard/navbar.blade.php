@@ -427,6 +427,11 @@
                                     <span class="menu-item" data-key="t-sales">Categories</span>
                                
                                 </a>
+                                <a href="/admin-article">
+                                    <i class="icon nav-icon" data-feather="user"></i>
+                                    <span class="menu-item" data-key="t-sales">Articles</span>
+                               
+                                </a>
                             </li>
 
                          

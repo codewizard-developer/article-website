@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Article;
 use App\Models\Category;
 
 class AdminController extends Controller
@@ -98,12 +99,13 @@ class AdminController extends Controller
     public function storeCategory(Request $request)
     {
         $request->validate([
-            'cat_name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
         ]);
     
         Category::create([
-            'cat_name' => $request->cat_name,
+            'cat_name' => $request->category,
         ]);
+        
     
         return redirect()->route('dashboard.categories')->with('success', 'Category added successfully');
     }
@@ -115,6 +117,45 @@ class AdminController extends Controller
     
         return redirect()->route('dashboard.categories')->with('success', 'Category deleted successfully');
     }
+    public function showarticle(Request $request)
+    {
+        // Initialize the search variable with an empty string
+        $search = '';
+    
+        $query = Article::query();
+    
+        // Apply search filters if query parameters are set
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%")
+                  ->orWhere('author_name', 'like', "%{$search}%")
+                  ->orWhere('author_email', 'like', "%{$search}%")
+                  ->orWhere('tags', 'like', "%{$search}%")
+                  ->orWhere('user_id', 'like', "%{$search}%");
+        }
+        // Retrieve articles with pagination
+        $articles = $query->paginate(10); // Show 10 articles per page
+        // Pass the articles and search query to the view
+        return view('dashboard.article', compact('articles', 'search'));
+    }
+    
+    // Delete article
+    public function deleteArticle($id)
+    {
+        $article = Article::findOrFail($id);
+        $article->delete();
+
+        return redirect()->route('articles.index')->with('success', 'Article deleted successfully');
+    }
+    public function updateVerify(Request $request, $id)
+{
+    $article = Article::findOrFail($id);
+    $article->verify = $request->input('verify') ? true : false;
+    $article->save();
+
+    return redirect()->back()->with('success', 'Verification status updated.');
+}
+
     
 
 }

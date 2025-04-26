@@ -22,4 +22,8 @@ class User extends Authenticatable
         'about',
         'password',
     ];
+    public function articles()
+    {
+        return $this->hasMany(Article::class);  // This assumes the foreign key is 'user_id'
+    }
 }
