@@ -747,6 +747,13 @@
                     </div>
                     <h3 class="form-card-title">Article Content</h3>
                 </div>
+                <div class="form-group">
+                    <label class="required" for="link">Back Link of Website</label>
+                    <div class="icon-input">
+                        <input type="url" id="link" name="link" class="icon-padding"
+                            placeholder="Enter the back link of the website" required>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label class="required" for="editor">Write Your Article</label>
@@ -792,9 +799,7 @@
         Article submitted successfully!
     </div>
 
-    <div class="footer">
-        © 2025 WordCraft - All rights reserved
-    </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
     <script>
@@ -1046,10 +1051,10 @@
                                 }
 
                                 const fileNameDisplay = document.getElementById(
-                                'file-name');
+                                    'file-name');
                                 if (fileNameDisplay) {
                                     fileNameDisplay.textContent =
-                                    'No files selected'; // Reset file display
+                                        'No files selected'; // Reset file display
                                 }
                             }, 3000); // Reset after 3 seconds
                         } else {
@@ -1058,6 +1063,21 @@
                     })
                     .catch(error => {
                         console.error('Error submitting the form:', error);
+
+                        // Get the error message
+                        let errorMessage = '';
+
+                        if (error.data && error.data.message) {
+                            // Extract the specific message from the error object
+                            errorMessage = error.data.message;
+                        } else {
+                            // Fallback to a generic message if the structure is different
+                            errorMessage =
+                                'An error occurred while submitting the form check if there is ';
+                        }
+
+                        // Display the error in a paragraph element
+                        document.getElementById('error-container').textContent = errorMessage;
 
                         if (error.status === 422 && error.data && error.data.errors) {
                             // Handle validation errors
@@ -1068,8 +1088,8 @@
                             showError(errorMessages.join('<br>'));
                         } else {
                             showError(
-                                'An error occurred while submitting the form. Please try again.'
-                                );
+                                'An error occurred while submitting the form. Please try again or you have enough article stock'
+                            );
                         }
                     })
                     .finally(() => {

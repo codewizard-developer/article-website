@@ -26,4 +26,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class);  // This assumes the foreign key is 'user_id'
     }
+    public function likedArticles()
+{
+    return $this->belongsToMany(Article::class, 'article_user_like')->withTimestamps();
+}
+
 }

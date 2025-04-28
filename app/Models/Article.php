@@ -17,6 +17,8 @@ class Article extends Model
         'user_id', // ✅ Required for mass assignment
         'tags',
         'supporting_files',
+        'link',
+        
     ];
     public function user()
     {
@@ -28,6 +30,11 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);  // Assuming the foreign key is 'category_id'
     }
+    public function usersWhoLiked()
+{
+    return $this->belongsToMany(User::class, 'article_user_like')->withTimestamps();
+}
+
     
     
 }

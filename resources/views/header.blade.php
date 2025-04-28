@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
-<base href="{{ url('/') }}/">
+    <base href="{{ url('/') }}/">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -48,23 +48,37 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
-                <form class="header-form">
+                <form class="header-form" method="GET" action="{{ route('search.results') }}">
                     <div class="header-search">
-                        <button type="submit" title="Search Submit "><i class="fas fa-search"></i></button>
-                        <input type="text" placeholder="Search, Whatever you needs...">
-                        <button type="button" title="Search Option" class="option-btn"><i
-                                class="fas fa-sliders-h"></i></button>
+                        <form id="search-form" action="{{ route('search.results') }}" method="GET">
+                            <button type="submit" title="Search Submit"><i class="fas fa-search"></i></button>
+                            <input type="text" name="query" placeholder="Search, Whatever you need..."
+                                value="{{ request('query') }}" required>
+                            <button type="button" title="Search Option" class="option-btn"><i
+                                    class="fas fa-sliders-h"></i></button>
+                        </form>
                     </div>
+
+                    <script>
+                    // Get the form and input element
+                    const searchForm = document.getElementById('search-form');
+                    const searchInput = searchForm.querySelector('input[name="query"]');
+
+                    // Add event listener for form submission
+                    searchForm.addEventListener('submit', function(event) {
+                        // Check if the input is empty
+                        if (!searchInput.value.trim()) {
+                            // Prevent form submission
+                            event.preventDefault();
+                            alert('Please enter a search term.');
+                        }
+                    });
+                    </script>
+
                     <div class="header-option">
-                        <div class="option-grid">
-                            <div class="option-group"><input type="text" placeholder="City"></div>
-                            <div class="option-group"><input type="text" placeholder="State"></div>
-                            <div class="option-group"><input type="text" placeholder="Min Price"></div>
-                            <div class="option-group"><input type="text" placeholder="Max Price"></div>
-                            <button type="submit"><i class="fas fa-search"></i><span>Search</span></button>
-                        </div>
                     </div>
                 </form>
+
                 <div class="header-right">
                     @if(Auth::check())
                     <!-- Display the logout button if the user is logged in -->
@@ -133,7 +147,7 @@
 
                     {{-- User name --}}
                     <h4>
-                        <a href="{{ url('/user/edit/' . Auth::user()->id) }}" class="sidebar-name">
+                        <a href="{{ url('/user/' . Auth::user()->id) }}" class="sidebar-name">
                             {{ $firstName }}
                         </a>
                     </h4>
@@ -158,12 +172,13 @@
                         <ul class="navbar-list">
                             <li class="navbar-item"><a class='navbar-link' href='/'>Home</a></li>
                             @if(Auth::check())
-    <li class="navbar-item">
-        <a class="navbar-link" href="{{ url('/user/' . Auth::user()->id) }}">Profile</a>
-    </li>
-@endif                            <li class="navbar-item"><a class='navbar-link' href='/article'>Post Article</a></li>
+                            <li class="navbar-item">
+                                <a class="navbar-link" href="{{ url('/user/' . Auth::user()->id) }}">Profile</a>
+                            </li>
+                            @endif <li class="navbar-item"><a class='navbar-link' href='/article'>Post Article</a></li>
                             <li class="navbar-item"><a class='navbar-link' href='/user-articles'>My Article</a></li>
                             <li class="navbar-item"><a class='navbar-link' href='/user/plans'>Plans</a></li>
+                            <li class="navbar-item"><a class='navbar-link' href='/contactus'>Contact Us</a></li>
                             <form action="{{ route('logout') }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 <!-- CSRF Token to prevent cross-site request forgery -->

@@ -118,26 +118,26 @@ class AdminController extends Controller
         return redirect()->route('dashboard.categories')->with('success', 'Category deleted successfully');
     }
     public function showarticle(Request $request)
-    {
-        // Initialize the search variable with an empty string
-        $search = '';
-    
-        $query = Article::query();
-    
-        // Apply search filters if query parameters are set
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where('title', 'like', "%{$search}%")
-                  ->orWhere('author_name', 'like', "%{$search}%")
-                  ->orWhere('author_email', 'like', "%{$search}%")
-                  ->orWhere('tags', 'like', "%{$search}%")
-                  ->orWhere('user_id', 'like', "%{$search}%");
-        }
-        // Retrieve articles with pagination
-        $articles = $query->paginate(10); // Show 10 articles per page
-        // Pass the articles and search query to the view
-        return view('dashboard.article', compact('articles', 'search'));
+{
+    $search = '';
+
+    $query = Article::query();
+
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where('title', 'like', "%{$search}%")
+              ->orWhere('author_name', 'like', "%{$search}%")
+              ->orWhere('author_email', 'like', "%{$search}%")
+              ->orWhere('tags', 'like', "%{$search}%")
+              ->orWhere('user_id', 'like', "%{$search}%");
     }
+
+    // Order by latest id first
+    $articles = $query->orderBy('id', 'desc')->paginate(10);
+
+    return view('dashboard.article', compact('articles', 'search'));
+}
+
     
     // Delete article
     public function deleteArticle($id)

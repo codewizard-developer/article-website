@@ -432,6 +432,11 @@
                                     <span class="menu-item" data-key="t-sales">Articles</span>
                                
                                 </a>
+                                <a href="/transections">
+                                    <i class="icon nav-icon" data-feather="user"></i>
+                                    <span class="menu-item" data-key="t-sales">Transections</span>
+                               
+                                </a>
                             </li>
 
                          

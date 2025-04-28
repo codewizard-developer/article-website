@@ -97,7 +97,7 @@
                         </div>
                         <div class="dash-focus dash-book">
                             <h2>{{$verifiedCount}}</h2>
-                            <p>total Post</p>
+                            <p>Verified Article</p>
                         </div>
 
                     </div>

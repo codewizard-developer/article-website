@@ -2,6 +2,7 @@
 
 @extends('header')
 @section('content')
+
 <section class="single-banner">
     <div class="container">
         <div class="row">
